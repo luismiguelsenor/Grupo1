@@ -1,0 +1,32 @@
+CREATE  DATABASE grupo1db;
+
+USE grupo1db;
+
+CREATE TABLE paises (
+	Continente VARCHAR(20), 
+	country VARCHAR(100)
+);
+
+CREATE TABLE horoscopos (
+	nombre VARCHAR(20), 
+	fechaDesde VARCHAR(10), 
+	fechaHasta VARCHAR(10)
+);
+
+
+CREATE TABLE useridprofile (
+	id  VARCHAR(20), 
+	gender  VARCHAR(1), 
+	age VARCHAR(3),
+	country VARCHAR(100),
+	registered DATE
+);
+
+CREATE TABLE Datos_musica( 
+	userid varchar(20), 
+	timestamp date, 
+	musicbrainz_artist_id varchar(100), 
+	artist_name varchar(100), 
+	musicbrainz_track_id varchar(100), 
+	track_name varchar(100) 
+);
