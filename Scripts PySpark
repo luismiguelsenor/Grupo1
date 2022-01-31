@@ -1,0 +1,67 @@
+from pyspark.sql import *
+from pyspark.sql.types import *
+from pyspark.sql.functions import *
+from pyspark import SparkContext
+sc = SparkContext.getOrCreate()
+sqlCOntext = SQLContext(sc)
+
+dfHoroscopos = spark.read.load("/horoscopos/horoscopos.csv",
+                     format="csv", sep=",", inferSchema="true", header="true")
+dfPaises = spark.read.load("/horoscopos/paises_estandar.csv",
+                     format="csv", sep=";", inferSchema="true", header="true")
+dfUsers = spark.read.load("/horoscopos/userid-profile.tsv",
+                     format="csv", sep="\t", inferSchema="true", header="true")
+dfUsersTimestamp = spark.read.load("/horoscopos/userid-timestamp-artid-artname-traid-traname.tsv",
+                     format="csv", sep="\t", inferSchema="true", header="true")
+
+
+#Agregar las columna con tipo date
+dfUsers2 = dfUsers.withColumn("fecha", to_date(col("registered"),"MMM dd"))
+dfHoroscopos2 = dfHoroscopos.withColumn("fecha_desde", to_date(col("FechaDesde"),"MMM dd").alias("MM-dd"))
+dfHoroscopos2 = dfHoroscopos2.withColumn("fecha_hasta", to_date(col("FechaHasta"),"MMM dd").alias("MM-dd"))
+
+
+#Hacer los select para tener las columnas con formato date
+dfHoroscoposFinal = dfHoroscopos2.select(col("Nombre").alias("horoscopo"),col("fecha_desde"),col("fecha_hasta"))
+dfUserFinal = dfUsers2.select(col("#id").alias("id"),col("gender"),col("age"),col("country"),col("fecha"))
+
+
+#Crear tablas lógicas para procesar consultas
+dfPaises.createOrReplaceTempView("paises")
+dfHoroscoposFinal.createOrReplaceTempView("horoscopos")
+dfUserFinal.createOrReplaceTempView("users")
+dfUsersTimestamp.createOrReplaceTempView("usersTimestamp")
+
+
+#Agrupar los usuarios por su horóscopo fijándose en la fecha de registro
+sqlContext.sql("""
+select horoscopo, u.id from
+users u join horoscopos h on fecha between fecha_desde and fecha_hasta
+group by u.id, h.horoscopo order by u.id
+""").show()
+
+
+#Qué continente pertenece cada usuario
+sqlContext.sql("""
+select u.id, p.CONTINENT from
+users u join paises p on p.COUNTRY= UPPER(u.country)
+""").show()
+
+
+#Cuántos usuarios por país pertenecen a cada signo del horóscopo
+sqlContext.sql("""
+select horoscopo, u.country, COUNT(DISTINCT u.id) as cantidad from
+users u join horoscopos h on fecha between fecha_desde and fecha_hasta
+group by h.horoscopo, u.country
+order by cantidad desc
+""").show()
+
+
+#El signo que tiene más usuarios a nivel mundial 
+sqlContext.sql("""
+select horoscopo, COUNT(DISTINCT u.id) as cantidad from
+users u join horoscopos h on fecha between fecha_desde and fecha_hasta
+group by h.horoscopo
+order by cantidad desc
+limit 1
+""").show()
