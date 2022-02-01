@@ -1,12 +1,12 @@
-﻿Nombre,FechaDesde,FechaHasta
-Aries,Mar 21,Apr 20
-Tauro,Apr 21,May 21
-Géminis,May 22,Jun 21
-Cáncer,Jun 22,Jul 22
-Leo,Jul 23,Aug 23
-Virgo,Aug 24,Sep 23
-Libra,Sep 24,Oct 23
-Escorpión,Oct 24,Nov 22
-Sagitario,Nov 23,Dec 21
-Capricornio,Dec 22,Jan 20
-Acuario,Jan 21,Feb 18
+﻿Nombre;FechaDesde;FechaHasta
+Aries;01/03/2021;01/04/2021
+Tauro;21/04/2021;01/05/2021
+Géminis;01/05/2021;01/06/2021
+Cáncer;01/06/2021;01/07/2021
+Leo;01/07/2021;23/08/2021
+Virgo;24/08/2021;01/09/2021
+Libra;01/09/2021;01/10/2021
+Escorpión;01/10/2021;01/11/2022
+Sagitario;01/11/2021;21/12/2021
+Capricornio;22/12/2021;20/01/2021
+Acuario;21/01/2021;01/02/2021
