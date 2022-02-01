@@ -9,8 +9,8 @@ CREATE TABLE paises (
 
 CREATE TABLE horoscopos (
 	nombre VARCHAR(20), 
-	fechaDesde VARCHAR(10), 
-	fechaHasta VARCHAR(10)
+	fechaDesde DATE, 
+	fechaHasta DATE
 );
 
 
